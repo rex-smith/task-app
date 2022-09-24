@@ -44,6 +44,21 @@ class App extends React.Component {
     }));
   };
 
+  resubmitTask = (id, value) => {
+    this.setState((prevState) => ({
+      taskArray: prevState.taskArray.map((task) => {
+        if (task.id === id) {
+          return { id: task.id, taskValue: value };
+        } else {
+          return task;
+        }
+      }),
+    }));
+  };
+
+  https://reactjs.org/docs/conditional-rendering.html
+  https://bobbyhadz.com/blog/react-replace-object-in-state-array
+
   render() {
     const { task, taskArray } = this.state;
 
@@ -62,7 +77,11 @@ class App extends React.Component {
             <button type="submit">Add Task</button>
           </form>
         </div>
-        <Overview taskArray={taskArray} deleteTask={this.deleteTask} />
+        <Overview
+          taskArray={taskArray}
+          deleteTask={this.deleteTask}
+          resubmitTask={this.resubmitTask}
+        />
       </div>
     );
   }
