@@ -56,9 +56,6 @@ class App extends React.Component {
     }));
   };
 
-  https://reactjs.org/docs/conditional-rendering.html
-  https://bobbyhadz.com/blog/react-replace-object-in-state-array
-
   render() {
     const { task, taskArray } = this.state;
 

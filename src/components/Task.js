@@ -1,34 +1,48 @@
 import React from "react";
 
-class Task extends React.component {
+class Task extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isDraft: false,
-      taskValue: this.props.taskValue,
+      taskText: "",
     };
     this.toggleDraft = this.toggleDraft.bind(this);
   }
 
   handleChange = (event) => {
     this.setState({
-      taskValue: event.target.value,
+      taskText: event.target.value,
     });
+  };
+
+  draftOutput() {
+    return (
+      <form className="inline-form">
+        <input
+          type="text"
+          value={this.state.taskText}
+          onChange={this.handleChange}
+        ></input>
+        <button
+          type="submit"
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.props.resubmitTask(this.props.id, this.state.taskText);
+          }}
+        ></button>
+      </form>
+    );
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.setState((prevState) => ({
-      taskArray: [
-        ...prevState.taskArray,
-        { taskValue: this.state.task.taskValue, id: this.state.task.id },
-      ],
-      task: {
-        taskValue: "",
-        id: uniqid(),
-      },
-    }));
-  };
+  staticOutput() {
+    return (
+      <div>
+        {this.props.taskValue}{" "}
+        <button onClick={this.toggleDraft()}>Edit</button>
+      </div>
+    );
+  }
 
   toggleDraft() {
     this.setState((prevState) => ({
@@ -36,39 +50,32 @@ class Task extends React.component {
     }));
   }
 
+  componentDidMount() {
+    if (this.props.taskValue) {
+      this.setState({
+        taskText: this.props.taskValue,
+      });
+    }
+  }
+
   render() {
-    const { id, taskValue, index, deleteTask, resubmitTask } = this.props;
-    const isDraft = this.state.isDraft;
+    const { id, index, deleteTask } = this.props;
     let taskOutput;
-    if (isDraft) {
-      taskOutput = (
-        <form>
-          <input type="text" 
-            value={taskValue}
-            onChange={this.handleChange}
-          ></input>
-          <button
-            type="submit"
-            onSubmit={() => {
-              resubmitTask(id, taskValue);
-              this.toggleDraft();
-            }}
-          ></button>
-        </form>
-      );
+    let draftOutput = this.draftOutput();
+    let staticOutput = this.staticOutput();
+    if (this.state.isDraft) {
+      taskOutput = draftOutput;
     } else {
-      taskOutput = taskValue <button onClick={this.toggleDraft()}>Edit</button>;
+      taskOutput = staticOutput;
     }
 
     return (
       <li key={id}>
-        {index}. {taskOutput}
+        {index}. {taskOutput}{" "}
         <i className="fa-solid fa-trash" onClick={() => deleteTask(id)}></i>
       </li>
     );
   }
 }
 
-function TaskInput(props) {
-  
-}
+export default Task;

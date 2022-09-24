@@ -8,6 +8,7 @@ function Overview(props) {
     return (
       <Task
         id={task.id}
+        key={task.id}
         taskValue={task.taskValue}
         index={index}
         deleteTask={deleteTask}
